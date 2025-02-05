@@ -1,5 +1,5 @@
 class Point:
-    def __init__(self, x: float, y: float, z: float):
+    def __init__(self, x: float, y: float, z: float, delta_t: float):
         self.x = x
         self.y = y
         self.z = z
@@ -58,6 +58,8 @@ class Data:
                 new_point = LidarPoint(point)
             elif len(point) == 21:
                 new_point = RadarPoint(point)
+                if not isinstance(new_point.kQPDH0, float) or new_point.kQPDH0 > 0.3:
+                    continue
             else:
                 raise AssertionError
             list_of_Points.append(new_point)

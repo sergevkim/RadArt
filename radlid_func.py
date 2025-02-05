@@ -7,7 +7,7 @@ import plotly.graph_objects as go
 import plotly
 import numpy as np
 
-def compare_radlid(radar_list: list[rpf.RadarPoint], lidar_list: list[rpf.LidarPoint], DEF_SIZE=100, POINT_SIZE=1, EPS=0.3):
+def compare_radlid(radar_list: list[rpf.RadarPoint], lidar_list: list[rpf.LidarPoint], DEF_SIZE=100, POINT_SIZE=1, EPS=0):
     scenes = []
     scenes.append({})
     scenes[0]['radar'] = radar_list
@@ -16,7 +16,7 @@ def compare_radlid(radar_list: list[rpf.RadarPoint], lidar_list: list[rpf.LidarP
     i = 0
     temp_radar = scenes[0]['radar']
     while i < len(temp_radar):
-        radar_coords.append((temp_radar[i][0], temp_radar[i][1], temp_radar[i][2], temp_radar[i][19]))
+        radar_coords.append((temp_radar[i].x, temp_radar[i].y, temp_radar[i].z, temp_radar[i].delta_t))
         i += 1
     
     X_radar = [coord[0] for coord in radar_coords]
@@ -94,10 +94,10 @@ def compare_radlid(radar_list: list[rpf.RadarPoint], lidar_list: list[rpf.LidarP
     
     lidar_coords = []
     i = 0
-    temp_lidar= np.array(random.sample(scenes[0]['lidar'], 10000))
+    temp_lidar= np.array(scenes[0]['lidar'])
     while i < len(temp_lidar):
-        if (abs(temp_lidar[i][2]) > EPS):
-            lidar_coords.append((temp_lidar[i][0], temp_lidar[i][1], temp_lidar[i][2], temp_lidar[i][3]))
+        if (abs(temp_lidar[i].z) > EPS):
+            lidar_coords.append((temp_lidar[i].x, temp_lidar[i].y, temp_lidar[i].z, temp_lidar[i].reflectance))
         i += 1
     
     X_lidar = [coord[0] for coord in lidar_coords]
