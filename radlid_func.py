@@ -9,7 +9,7 @@ import numpy as np
 
 def compare_radlid(radar_list: list[rpf.RadarPoint], lidar_list: list[rpf.LidarPoint], DEF_SIZE=100, POINT_SIZE=1, EPS=0.3):
     scenes = []
-    scenes[0] = []
+    scenes.append({})
     scenes[0]['radar'] = radar_list
     scenes[0]['lidar'] = lidar_list
     radar_coords = []
