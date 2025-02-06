@@ -68,3 +68,7 @@ class Data:
     def get_points_with_ratio(points: list[Point], ratio: float) -> list[Point]:
         import random
         return random.sample(points, int(len(points) * ratio))
+        
+    def remove_bottom_layer(points: list[LidarPoint], height) -> list[LidarPoint]:
+        return [p for p in points if p.z > height]
+        
