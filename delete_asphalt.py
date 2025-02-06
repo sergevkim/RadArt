@@ -1,6 +1,7 @@
 import numpy as np
 import random
 import json
+from typing inmort List
 from read_and_prepare_files import LidarPoint
 
 class RANSAC:
