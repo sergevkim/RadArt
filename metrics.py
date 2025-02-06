@@ -22,14 +22,14 @@ class Grid():
 
             self.data[i,j].append(point)
             
-    def count(i: int, j: int) -> int:
-        return d[i, j].count()
+    def count(self, i: int, j: int) -> int:
+        return len(self.data[i, j])
     
     def size() -> int:
         return self.size
         
-    def density(i: int, j: int) -> float:
-        return self.count(i, j) / self.size
+    def density(self, i, j):
+        return self.count(i, j) / self.size if self.size > 0 else 0
         
 def DensityMetric(lid_cloud: list[Point], rad_cloud: list[Point]) -> float:
     grid_1 = Grid(lid_cloud)
@@ -38,8 +38,8 @@ def DensityMetric(lid_cloud: list[Point], rad_cloud: list[Point]) -> float:
     keys = grid_1.data.keys() | grid_2.data.keys()
     for key in keys:
         i, j = key
-        s += (grid_2.density(i, j) - grid_2.density(i, j)) ** 2
-    return s ** 0.5
+        s += (grid_1.density(i, j) - grid_2.density(i, j)) ** 2
+    return s ** 0.5 / len(keys)
 
 def from_point_to_pair(points: list[Point]):
     return [(p.x, p.y) for p in points]
@@ -54,8 +54,6 @@ def find_nearest_lidar_points(lidar_points: list[Point], radar_points: list[Poin
     return distances, [lid_points[i] for i in indices]
     
 def NearestPointMetric(lid_cloud: list[Point], rad_cloud: list[Point]) -> float:
-    lid_points = from_point_to_pair(lid_cloud)
-    rad_points = from_point_to_pair(rad_cloud)
-    distances = find_nearest_lidar_points(lid_points, rad_points)[0]
-    return ((distances ** 2).sum()) ** 0.5
+    distances = find_nearest_lidar_points(lidar_points, radar_points)[0]
+    return ((distances ** 2).sum() / len(radar_points)) ** 0.5
                                      
