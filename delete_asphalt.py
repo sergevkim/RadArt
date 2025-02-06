@@ -64,7 +64,7 @@ class RANSAC:
         # Фильтрация исходных точек
         if best_plane is not None:
             a, b, c, d = best_plane
-            filtered = [a
+            filtered = [
                 p for p in points 
                 if plane_distance(p, best_plane) >= distance_threshold or p.z > -0.2
             ]
