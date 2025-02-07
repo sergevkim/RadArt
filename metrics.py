@@ -20,6 +20,7 @@ class Grid():
             x = point.x
             y = point.y
             if (x - l_border) * (x - r_border) >= 0 or (y - top_border) * (y - bottom_border) >= 0:
+                self.size -= 1
                 continue
             i = int(col_num * (x - l_border) / (r_border - l_border))
             j = int(row_num * (y - bottom_border) / (top_border - bottom_border))
