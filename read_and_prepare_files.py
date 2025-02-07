@@ -71,4 +71,24 @@ class Data:
         
     def remove_bottom_layer(points: list[LidarPoint], height) -> list[LidarPoint]:
         return [p for p in points if p.z > height]
+
+    def remove_bad_points(points: list[RadarPoint]) -> list[RadarPoint]:
+        from scipy.spatial import cKDTree
+        import numpy as np
+        point_coords = [[point.x, point.y] for point in points]
+        tree = cKDTree(point_coords)
+        distances, _ = tree.query(point_coords, k=2)
+        min_distances = distances[:, 1]
         
+        mean_distance = np.mean(min_distances)
+        std_distance = np.std(min_distances)
+
+        k = 1
+        threshold = mean_distance + k * std_distance
+        
+        final_points: list[RadarPoint] = []
+        
+        for i, point in enumerate(points):
+            if min_distances[i] <= threshold:
+                final_points.append(point)
+        return final_points
