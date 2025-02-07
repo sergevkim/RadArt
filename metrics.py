@@ -5,7 +5,7 @@ from collections import defaultdict
 
 class Grid():
     def __init__(self, data: list[Point], row_num: int = 100, col_num: int = 100, l_border: float = -130,
-                 r_border: float = 130, top_border: float = -130, bottom_border: float = 130):
+                 r_border: float = 130, bottom_border: float = -130, top_border: float = 130):
         self.row_num = row_num
         self.col_num = col_num
         
@@ -17,9 +17,12 @@ class Grid():
         self.data = defaultdict(list)
         self.size = len(data)
         for point in data:
-            
-            i = int(col_num * (point.x - l_border) / (r_border - l_border))
-            j = int(row_num * (point.y - bottom_border) / (top_border - bottom_border))
+            x = point.x
+            y = point.y
+            if (x - l_border) * (x - r_border) >= 0 or (y - top_border) * (y - bottom_border) >= 0:
+                continue
+            i = int(col_num * (x - l_border) / (r_border - l_border))
+            j = int(row_num * (y - bottom_border) / (top_border - bottom_border))
 
             self.data[i,j].append(point)
             
@@ -32,9 +35,9 @@ class Grid():
     def density(self, i, j):
         return self.count(i, j) / self.size if self.size > 0 else 0
         
-def DensityMetric(lid_cloud: list[Point], rad_cloud: list[Point]) -> float:
-    grid_1 = Grid(lid_cloud)
-    grid_2 = Grid(rad_cloud)
+def DensityMetric(lid_cloud: list[Point], rad_cloud: list[Point], size: int) -> float:
+    grid_1 = Grid(lid_cloud, size, size)
+    grid_2 = Grid(rad_cloud, size, size)
     s = 0
     keys = grid_1.data.keys() | grid_2.data.keys()
     for key in keys:
