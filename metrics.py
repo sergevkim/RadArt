@@ -1,6 +1,7 @@
 import numpy as np
 from scipy.spatial import KDTree
 from read_and_prepare_files import RadarPoint, LidarPoint, Point, Data
+from collections import defaultdict
 
 class Grid():
     def __init__(self, data: list[Point], row_num: int = 100, col_num: int = 100, l_border: float = -130,
@@ -44,16 +45,15 @@ def DensityMetric(lid_cloud: list[Point], rad_cloud: list[Point]) -> float:
 def from_point_to_pair(points: list[Point]):
     return [(p.x, p.y) for p in points]
 
-def find_nearest_lidar_points(lidar_points: list[Point], radar_points: list[Point]):
+def find_nearest_lidar_points(lidar_points: list[(float, float)], radar_points: list[(float, float)]):
     #Находит ближайшую лидарную точку для каждой радарной точки на плоскости и расстояние до нее.
     lid_points = from_point_to_pair(lidar_points)
     rad_points = from_point_to_pair(radar_points)
-    
     lidar_tree = KDTree(lid_points)  
     distances, indices = lidar_tree.query(rad_points) 
-    return distances, [lid_points[i] for i in indices]
+    return distances, [lidar_points[i] for i in indices]
     
 def NearestPointMetric(lid_cloud: list[Point], rad_cloud: list[Point]) -> float:
-    distances = find_nearest_lidar_points(lidar_points, radar_points)[0]
-    return ((distances ** 2).sum() / len(radar_points)) ** 0.5
+    distances = find_nearest_lidar_points(lid_cloud, rad_cloud)[0]
+    return ((distances ** 2).sum() / len(rad_cloud)) ** 0.5
                                      
