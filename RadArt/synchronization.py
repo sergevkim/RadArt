@@ -32,5 +32,4 @@ def radar_time_shift(rad_point: RadarPoint, mini_delta=0.06, unchanged=False) ->
 def get_fixed_radar_points(rad_points: list[RadarPoint], mini_delta=0.06, unchanged=False) -> list[Point]:
     if unchanged:
         return list(map(lambda x:radar_time_shift(x, mini_delta=mini_delta, unchanged=True), rad_points))
-    
     return list(map(radar_time_shift, rad_points))
