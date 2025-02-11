@@ -58,8 +58,6 @@ class Data:
                 new_point = LidarPoint(point)
             elif len(point) == 21:
                 new_point = RadarPoint(point)
-                if not isinstance(new_point.kQPDH0, float) or new_point.kQPDH0 > 0.3:
-                    continue
             else:
                 raise AssertionError
             list_of_Points.append(new_point)
@@ -92,3 +90,51 @@ class Data:
             if min_distances[i] <= threshold:
                 final_points.append(point)
         return final_points
+
+    def apply_gaussian_kernel_to_mult_radar_points(points: list[Point], kernel_size: int = 3, multiply_coef: float = 1.035, power: float = 1/100) -> list[Point]:
+        import numpy as np
+        from scipy.ndimage import gaussian_filter
+        import matplotlib.pyplot as plt
+        import random
+
+        # Step 1: Define the grid
+        grid_size = (3000, 3000)  # Adjust based on your surface size
+        grid = np.zeros(grid_size)
+
+        # Step 2: Place points on the grid
+        for point in points:
+            grid[int(point.x) * 10 + 1500, int(point.y) * 10 + 1500] += 1
+
+        # Step 3: Apply Gaussian kernel
+        sigma = kernel_size  # Adjust sigma for smoother or sharper density
+        density_map = gaussian_filter(grid, sigma=sigma)
+
+        # Step 4: Normalize (optional, depending on your use case)
+        # density_map = density_map / np.sum(density_map)
+
+        # Visualize the density map
+        plt.imshow(density_map, cmap='hot', origin='lower')
+        plt.colorbar(label='Density')
+        plt.title('Point Density Map')
+        plt.show()
+        # print(np.max(density_map))
+        density_map = np.power(density_map, power)
+        plt.imshow(density_map, cmap='hot', origin='lower')
+        plt.colorbar(label='Density')
+        plt.title('Point Density Map')
+        plt.show()
+        counter = 0
+        print(len(points))
+        for i in range(3000):
+            for j in range(3000):
+                amount_of_points_in_sq = int(density_map[i][j] * multiply_coef)
+                for k in range(amount_of_points_in_sq):
+                    x = (random.random() + i - 1500) / 10
+                    y = (random.random() + j - 1500) / 10
+                    point = Point(x, y, 0, delta_t=0)
+                    points.append(point)
+                    counter += 1
+              
+        print(counter)
+        print(len(points))
+        return points
