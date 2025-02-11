@@ -1,5 +1,5 @@
 import json
-from read_and_prepare_files import RadarPoint, Point
+from radart.utils.preprocessing import RadarPoint, Point
 
 def radar_time_shift(rad_point: RadarPoint, mini_delta=0.06, unchanged=False) -> Point | RadarPoint:
     with open('radar_positions.json') as f:

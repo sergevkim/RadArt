@@ -1,6 +1,5 @@
-import numpy as np
 from scipy.spatial import KDTree
-from read_and_prepare_files import RadarPoint, LidarPoint, Point, Data
+from radart.utils.preprocessing import Point
 from collections import defaultdict
 
 class Grid():

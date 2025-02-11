@@ -1,7 +1,7 @@
 import numpy as np
 import random
 from typing import List
-from read_and_prepare_files import LidarPoint
+from radart.utils.preprocessing import LidarPoint
 
 def fit_plane(p1, p2, p3):
 
