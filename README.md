@@ -43,21 +43,18 @@ python scripts/launch_vis.py
 │   └── reflectance_launcher.ipynb
 │
 ├── radart                                     <- Source code for use in this project.
-│   ├── core                                   <- Core functionality.
-│   │   ├── __init__.py  
+│   ├── __init__.py                            <- Initializes the radart package.
+│   ├── core                                   <- Core functionality. 
 │   │   ├── lidar_denoiser.py                  <- Removes unnecessary noise from lidar data.
 │   │   └── synchronization.py                 <- Shifts radar data to a single timestamp.
 │   │
 │   ├── metrics                                <- Metrics for evaluation.
-│   │   ├── __init__.py
 │   │   └── metrics.py 
 │   │
 │   ├── utils                                  <- Utility scripts.
-│   │   ├── __init__.py
 │   │   └── preprocessing.py
 │   │
 │   ├── visual                                 <- Visualization scripts.
-│   │   ├── __init__.py
 │   │   ├── delay_variety.py
 │   │   ├── delays_and_speedcol...
 │   │   ├── paint_reflectance.py
