@@ -20,7 +20,7 @@ bash scripts/download_data.sh
 ```
 
 ## Run scripts
-rc
+
 ### Calculate metrics:
 ```
 python scripts/calc_metrics.py
@@ -30,4 +30,8 @@ python scripts/calc_metrics.py
 ```
 python scripts/launch_vis.py
 ```
+
+### Project architecture:
+
+TODO
 
