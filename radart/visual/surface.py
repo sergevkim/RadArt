@@ -4,7 +4,7 @@ from radart.utils.preprocessing import Data, RadarPoint, LidarPoint
 from radart.metrics.metrics import calc_metrics
 
 
-def create_surface_plot(radar_points, lidar_points, current_mini_delta, current_delta_t):
+def create_surface_plot(radar_points, lidar_points, vec_to_rads):
     delta_t_values = np.arange(0, 2.1, 0.1)
     mini_delta_values = np.arange(0, 1.1, 0.1)
     X, Y = np.meshgrid(delta_t_values, mini_delta_values)
@@ -14,8 +14,8 @@ def create_surface_plot(radar_points, lidar_points, current_mini_delta, current_
     for i, mini_delta in enumerate(mini_delta_values):
         for j, delta_t in enumerate(delta_t_values):
 
-            sampled_radar = Data.get_points_with_ratio(radar_points, mini_delta) or []
-            sampled_lidar = Data.get_points_with_ratio(lidar_points, mini_delta) or []
+            sampled_radar = radar_points
+            sampled_lidar = Data.get_points_with_ratio(lidar_points, 0.1)
 
             if not sampled_radar and not sampled_lidar:
                 Z_density[i, j] = 0
@@ -48,25 +48,24 @@ def create_surface_plot(radar_points, lidar_points, current_mini_delta, current_
                 Z_nearest[i, j] = 0
                 continue
 
-            try:
-                density_metric, nearest_metric = calc_metrics(
-                    lidar_cloud=lidar_cloud,
-                    radar_cloud=radar_cloud,
-                    mini_delta=mini_delta,
-                    delta_t=delta_t,
-                    multiply_radar_points=False,
-                    denoise_lidar_points=False
-                )
-            except:
-                density_metric, nearest_metric = 0, 0
+            density_metric, nearest_metric = calc_metrics(
+                lidar_cloud=lidar_cloud,
+                radar_cloud=radar_cloud,
+                vecs_to_rads=vec_to_rads,
+                mini_delta=mini_delta,
+                delta_t=delta_t,
+                multiply_radar_points=False,
+                denoise_lidar_points=False
+            )
 
             Z_density[i, j] = density_metric
             Z_nearest[i, j] = nearest_metric
 
-    fig = go.Figure()
+    fig_density = go.Figure()
+    fig_nearest = go.Figure()
 
     if np.any(Z_density):
-        fig.add_trace(go.Surface(
+        fig_density.add_trace(go.Surface(
             x=X, y=Y, z=Z_density,
             colorscale='Viridis',
             name='Density Metric',
@@ -74,23 +73,24 @@ def create_surface_plot(radar_points, lidar_points, current_mini_delta, current_
         ))
 
     if np.any(Z_nearest):
-        fig.add_trace(go.Surface(
+        fig_nearest.add_trace(go.Surface(
             x=X, y=Y, z=Z_nearest,
             colorscale='Plasma',
             name='Nearest Point Metric',
             opacity=0.7
         ))
-    fig.update_layout(
-        title=f'3D Metrics (Current δt={current_delta_t}, Δ={current_mini_delta})',
-        scene=dict(
-            xaxis_title='delta_t',
-            yaxis_title='mini_delta',
-            zaxis_title='Metric Value',
-            camera_eye=dict(x=1.5, y=1.5, z=0.8)
-        ),
-        width=1200,
-        height=800,
-        margin=dict(l=60, r=60, b=60, t=60)
-    )
 
-    return fig
+    for fig in [fig_density, fig_nearest]:
+        fig.update_layout(
+            scene=dict(
+                xaxis_title='delta_t',
+                yaxis_title='mini_delta',
+                zaxis_title='Metric Value',
+                camera_eye=dict(x=1.5, y=1.5, z=0.8)
+            ),
+            width=1200,
+            height=600,
+            margin=dict(l=60, r=60, b=60, t=60)
+        )
+
+    return fig_density, fig_nearest
