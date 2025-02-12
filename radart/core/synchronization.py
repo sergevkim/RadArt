@@ -31,5 +31,5 @@ def get_fixed_radar_points(rad_points: list[RadarPoint], vecs_to_rads: dict, min
     return list(map(lambda x:radar_time_shift(rad_point = x,
                                               vecs_to_rads = vecs_to_rads,
                                               mini_delta = mini_delta,
-                                              unchanged=True),
+                                              unchanged=unchanged),
                     rad_points))
