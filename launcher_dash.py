@@ -41,6 +41,7 @@ def update_metrics(n):
 @callback(Output('live-update-graph', 'figure'),
               Input('interval-component', 'n_intervals'))
 def update_graph_live(n):
+    print(n)
     satellite = Orbital('TERRA')
     data = {
         'time': [],
@@ -87,4 +88,5 @@ def update_graph_live(n):
 
 
 if __name__ == '__main__':
-    app.run(debug=True)
+    #app.run(debug=True, port=8052)
+    app.run(port=8052)
