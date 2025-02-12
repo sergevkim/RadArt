@@ -1,6 +1,25 @@
+import numpy as np
 from scipy.spatial import KDTree
-from radart.utils.preprocessing import Point
+from radart.utils.preprocessing import RadarPoint, LidarPoint, Point, Data, apply_gaussian_kernel_to_mult_radar_points
 from collections import defaultdict
+from radart.core.lidar_denoiser import noise_filtering
+
+def from_point_to_pair(points: list[Point]):
+    return [(p.x, p.y) for p in points]
+    
+class LidarCloud():
+    def __init__(self, list_of_points: list[LidarPoint]):
+        self._points = list_of_points
+        self._lidar_tree = KDTree(from_point_to_pair(list_of_points))
+        
+    def __getitem__(self, index: int) -> Point:
+        return self._points[index]
+
+    def __len__(self) -> int:
+        return len(self._points)
+
+    def __iter__(self):
+        return iter(self._points)
 
 class Grid():
     def __init__(self, data: list[Point], row_num: int = 100, col_num: int = 100, l_border: float = -130,
@@ -35,28 +54,46 @@ class Grid():
     def density(self, i, j):
         return self.count(i, j) / self.size if self.size > 0 else 0
         
-def DensityMetric(lid_cloud: list[Point], rad_cloud: list[Point], size: int) -> float:
-    grid_1 = Grid(lid_cloud, size, size)
+def density_metric(lid_cloud: LidarCloud, rad_cloud: list[Point], size: int) -> float:
+    grid_1 = Grid(lid_cloud._points, size, size)
     grid_2 = Grid(rad_cloud, size, size)
     s = 0
     keys = grid_1.data.keys() | grid_2.data.keys()
     for key in keys:
         i, j = key
         s += (grid_1.density(i, j) - grid_2.density(i, j)) ** 2
-    return s ** 0.5 / len(keys)
+    return (s / len(keys)) ** 0.5
 
-def from_point_to_pair(points: list[Point]):
-    return [(p.x, p.y) for p in points]
 
-def find_nearest_lidar_points(lidar_points: list[(float, float)], radar_points: list[(float, float)]):
+
+def find_nearest_lidar_points(lidar_cloud: LidarCloud, radar_cloud: list[Point]):
     #Находит ближайшую лидарную точку для каждой радарной точки на плоскости и расстояние до нее.
-    lid_points = from_point_to_pair(lidar_points)
-    rad_points = from_point_to_pair(radar_points)
-    lidar_tree = KDTree(lid_points)  
-    distances, indices = lidar_tree.query(rad_points) 
-    return distances, [lidar_points[i] for i in indices]
+    radar_points = from_point_to_pair(radar_cloud)
+    distances, indices = lidar_cloud._lidar_tree.query(radar_points) 
+    return distances, [lidar_cloud._points[i] for i in indices]
     
-def NearestPointMetric(lid_cloud: list[Point], rad_cloud: list[Point]) -> float:
+def nearest_point_metric(lid_cloud: LidarCloud, rad_cloud: list[Point]) -> float:
     distances = find_nearest_lidar_points(lid_cloud, rad_cloud)[0]
     return ((distances ** 2).sum() / len(rad_cloud)) ** 0.5
+
+
+def calc_metrics(lidar_cloud: list[LidarPoint],
+                 radar_cloud: list[RadarPoint],
+                 mini_delta: float = 0.06,
+                 delta_t: float = 3,
+                 multiply_radar_points: bool = False,
+                 denoise_lidar_points: bool = False) -> tuple[float]:
+    
+    radar = get_fixed_radar_points(radar_cloud, mini_delta =  mini_delta)
+    if denoise_lidar_points:
+        lidar = noise_filtering(lidar_cloud)
+    else:
+        lidar = lidar_cloud
+    lidar = LidarCloud(lidar_cloud)
+    radar = [p for p in radar if abs(p.delta_t) < delta_t]
+    if multiply_radar_points:
+        radar = apply_gaussian_kernel_to_mult_radar_points(radar)
+    return density_metric(lidar, radar, 300), nearest_point_metric(lidar, radar)
+    
+
                                      

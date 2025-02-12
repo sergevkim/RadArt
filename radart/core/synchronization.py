@@ -1,9 +1,7 @@
 import json
 from radart.utils.preprocessing import RadarPoint, Point
 
-def radar_time_shift(rad_point: RadarPoint, mini_delta=0.06, unchanged=False) -> Point | RadarPoint:
-    with open('radar_positions.json') as f:
-        vecs_to_rads = json.load(f)
+def radar_time_shift(rad_point: RadarPoint, vecs_to_rads: dict, mini_delta=0.06, unchanged=False) -> Point | RadarPoint:
     radar_idx = rad_point.radar_idx
     x0 = vecs_to_rads[str(int(radar_idx))][0]
     y0 = vecs_to_rads[str(int(radar_idx))][1]
@@ -29,7 +27,11 @@ def radar_time_shift(rad_point: RadarPoint, mini_delta=0.06, unchanged=False) ->
     
     return rad_point
 
-def get_fixed_radar_points(rad_points: list[RadarPoint], mini_delta=0.06, unchanged=False) -> list[Point]:
+def get_fixed_radar_points(rad_points: list[RadarPoint], vecs_to_rads: dict, mini_delta = 0.06, unchanged = False) -> list[Point]:
     if unchanged:
-        return list(map(lambda x:radar_time_shift(x, mini_delta=mini_delta, unchanged=True), rad_points))
+        return list(map(lambda x:radar_time_shift(rad_point = x,
+                                                  vecs_to_rads = vecs_to_rads,
+                                                  mini_delta = mini_delta,
+                                                  unchanged=True),
+                        rad_points))
     return list(map(radar_time_shift, rad_points))

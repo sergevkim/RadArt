@@ -39,9 +39,9 @@ class LidarPoint(Point):
         self.lidar_ring = point[4]
 
 class Data:
-    def read_json(index: int) -> dict:
+    def read_json(path: str) -> dict:
         import json
-        with open('data/scene_{}.json'.format(index)) as f:
+        with open(path) as f:
             d = json.load(f)
         return d
 
