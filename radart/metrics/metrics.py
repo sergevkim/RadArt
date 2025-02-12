@@ -1,8 +1,8 @@
 import numpy as np
 from scipy.spatial import KDTree
-from preprocessing import RadarPoint, LidarPoint, Point, Data, apply_gaussian_kernel_to_mult_radar_points
+from radart.utils.preprocessing import RadarPoint, LidarPoint, Point, Data, apply_gaussian_kernel_to_mult_radar_points
 from collections import defaultdict
-from lidar_denoiser import noise_filtering
+from radart.core.lidar_denoiser import noise_filtering
 
 def from_point_to_pair(points: list[Point]):
     return [(p.x, p.y) for p in points]
