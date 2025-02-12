@@ -17,10 +17,6 @@ def radar_time_shift(rad_point: RadarPoint, vecs_to_rads: dict, mini_delta=0.06,
     new_y = y*(v_rad + length)/length + y0
     new_z = 0
 
-    if unchanged:
-        point_new = Point(new_x, new_y, new_z, rad_point.delta_t)
-        return point_new
-
     rad_point.x = new_x
     rad_point.y = new_y
     rad_point.z = new_z
@@ -34,4 +30,8 @@ def get_fixed_radar_points(rad_points: list[RadarPoint], vecs_to_rads: dict, min
                                                   mini_delta = mini_delta,
                                                   unchanged=True),
                         rad_points))
-    return list(map(radar_time_shift, rad_points))
+    return list(map(lambda x:radar_time_shift(rad_point = x,
+                                                vecs_to_rads = vecs_to_rads,
+                                                mini_delta = mini_delta,
+                                                unchanged=False),
+                    rad_points))

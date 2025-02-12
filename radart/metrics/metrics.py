@@ -1,3 +1,4 @@
+from copy import deepcopy
 import numpy as np
 from radart.core.synchronization import get_fixed_radar_points
 from scipy.spatial import KDTree
@@ -78,23 +79,20 @@ def nearest_point_metric(lid_cloud: LidarCloud, rad_cloud: list[Point]) -> float
     return ((distances ** 2).sum() / len(rad_cloud)) ** 0.5
 
 
-def calc_metrics(lidar_cloud: list[LidarPoint],
+def calc_metrics(lidar_cloud: LidarCloud,
                  radar_cloud: list[RadarPoint],
+                 vecs_to_rads: dict,
                  mini_delta: float = 0.06,
                  delta_t: float = 3,
                  multiply_radar_points: bool = False,
                  denoise_lidar_points: bool = False) -> tuple[float]:
     
-    radar = get_fixed_radar_points(radar_cloud, mini_delta =  mini_delta)
+    radar = get_fixed_radar_points(rad_points=deepcopy(radar_cloud), vecs_to_rads=vecs_to_rads, mini_delta=mini_delta)
     if denoise_lidar_points:
-        lidar = noise_filtering(lidar_cloud)
+        lidar = LidarCloud(noise_filtering(lidar_cloud._points))
     else:
         lidar = lidar_cloud
-    lidar = LidarCloud(lidar)
     radar = [p for p in radar if abs(p.delta_t) < delta_t]
     if multiply_radar_points:
         radar = Data.apply_gaussian_kernel_to_mult_radar_points(radar)
     return density_metric(lidar, radar, 300), nearest_point_metric(lidar, radar)
-    
-
-                                     
