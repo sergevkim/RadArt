@@ -1,6 +1,7 @@
 import numpy as np
+from radart.core.synchronization import get_fixed_radar_points
 from scipy.spatial import KDTree
-from radart.utils.preprocessing import RadarPoint, LidarPoint, Point, Data, apply_gaussian_kernel_to_mult_radar_points
+from radart.utils.preprocessing import RadarPoint, LidarPoint, Point, Data
 from collections import defaultdict
 from radart.core.lidar_denoiser import noise_filtering
 
@@ -48,7 +49,7 @@ class Grid():
     def count(self, i: int, j: int) -> int:
         return len(self.data[i, j])
     
-    def size() -> int:
+    def size(self) -> int:
         return self.size
         
     def density(self, i, j):
@@ -89,10 +90,10 @@ def calc_metrics(lidar_cloud: list[LidarPoint],
         lidar = noise_filtering(lidar_cloud)
     else:
         lidar = lidar_cloud
-    lidar = LidarCloud(lidar_cloud)
+    lidar = LidarCloud(lidar)
     radar = [p for p in radar if abs(p.delta_t) < delta_t]
     if multiply_radar_points:
-        radar = apply_gaussian_kernel_to_mult_radar_points(radar)
+        radar = Data.apply_gaussian_kernel_to_mult_radar_points(radar)
     return density_metric(lidar, radar, 300), nearest_point_metric(lidar, radar)
     
 
