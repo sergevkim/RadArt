@@ -3,6 +3,7 @@ class Point:
         self.x = x
         self.y = y
         self.z = z
+        self.delta_t = delta_t
     def get_xyz(self):
         return self.x, self.y, self.z
 
