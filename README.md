@@ -52,7 +52,7 @@ python scripts/visualizer.py
 
 ### Project architecture:
 ```
-├── media                                      <- Photos and GIFs for README.md                                  <- Source code for use in this project.
+├── media                                      <- Photos and GIFs for README.md                                  
 │   ├── checkboxes.gif                            
 │   ├── sliders.gif
 │   ├── sufrace_photo.png
