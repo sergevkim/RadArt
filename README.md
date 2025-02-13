@@ -88,7 +88,7 @@ python scripts/visualizer.py
 ## Website interface
 
 ```
-питонячий.рф
+http://питонячий.рф
 ```
 
 ### Sliders:
