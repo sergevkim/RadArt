@@ -1,11 +1,8 @@
 from dash import Dash, dcc, html, Input, Output, callback, State
-import plotly.graph_objects as go
 import numpy as np
 
 from radart.utils.preprocessing import Data, RadarPoint, LidarPoint
-# import read_and_prepare_files as rpf
 import plotly.graph_objects as go
-import plotly
 from radart.core.synchronization import get_fixed_radar_points
 
 scene = Data.read_json('data/scenes/scene_16.json')
@@ -17,7 +14,7 @@ lidar_ints = Data.get_lidars(scene)
 radar_points = Data.convert_ints_to_points(radar_ints)
 lidar_points = Data.convert_ints_to_points(lidar_ints)
 
-lidar_points = Data.get_points_with_ratio(lidar_points, 0.1)
+lidar_points = Data.get_points_with_ratio(lidar_points, 1)
 
 
 def radar_point_to_dict(pt: RadarPoint) -> dict:
