@@ -1,9 +1,7 @@
 import argparse
 import json
-from radart.metrics.metrics import Grid, density_metric, from_point_to_pair, find_nearest_lidar_points, nearest_point_metric, LidarCloud, calc_metrics
-from radart.utils.preprocessing import RadarPoint, Point, Data, LidarPoint, apply_gaussian_kernel_to_mult_radar_points
-from radart.core.synchronization import get_fixed_radar_points
-from radart.core.lidar_denoiser import noise_filtering
+from radart.metrics.metrics import  LidarCloud, calc_metrics
+from radart.utils.preprocessing import  Data
 
 def main():
     parser = argparse.ArgumentParser(description="Обрабатывает параметры запуска")
