@@ -13,7 +13,7 @@ def main():
     
     parser.add_argument("--radar_positions_path",
                        type = str,
-                       default = "radar_positions.json",
+                       default = "data/radar_positions.json",
                        help = "Путь до координат радаров")
     
     parser.add_argument("--mini_delta",
@@ -78,7 +78,7 @@ def main():
     if nearest_point:
         print("Nearest point metric:", results[1])
     if not density and not nearest_point:
-        print("Densiti metric:", results[0])
+        print("Density metric:", results[0])
         print("Nearest point metric:", results[1])
 
 
