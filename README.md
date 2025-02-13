@@ -33,10 +33,10 @@ python scripts/calculate_metrics.py
                                    (default=3)
 
 --denoise_lidar                 <- Clearing lidar points from large flat surfaces (particularly roads)
-                                   (default=True)
+                                   (default=False)
 
 --multiply_radar_points         <- Smooth out and multiply radar points
-                                   (default=True)
+                                   (default=False)
                                    
 --nearest_point                 <- Use nearest point metric
                                    (default=True)
@@ -105,7 +105,6 @@ http://питонячий.рф
 1. Burzars<br />
 2. sval9ka07<br />
 3. MIPTestet<br />
-4. sergevkim<br />
-5. sayheykid<br />
-6. aleksanderkarpov<br />
+4. sayheykid<br />
+5. aleksanderkarpov<br />
 
