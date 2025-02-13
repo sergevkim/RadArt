@@ -4,6 +4,9 @@ class Point:
         self.y = y
         self.z = z
         self.delta_t = delta_t
+        self.initial_x = x
+        self.initial_y = y
+        self.initial_z = z
     def get_xyz(self):
         return self.x, self.y, self.z
 
@@ -12,6 +15,9 @@ class RadarPoint(Point):
         self.x = point[0]
         self.y = point[1]
         self.z = point[2]
+        self.initial_x = point[0]
+        self.initial_y = point[1]
+        self.initial_z = point[2]
         self.kAbsoluteRadialVelocity = point[3]
         self.kRadarCrossSection = point[4]
         self.kRelativeRadialVelocity = point[5]

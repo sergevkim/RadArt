@@ -1,4 +1,3 @@
-from copy import deepcopy
 import numpy as np
 from radart.core.synchronization import get_fixed_radar_points
 from scipy.spatial import KDTree
@@ -87,7 +86,7 @@ def calc_metrics(lidar_cloud: LidarCloud,
                  multiply_radar_points: bool = False,
                  denoise_lidar_points: bool = False) -> tuple[float]:
     
-    radar = get_fixed_radar_points(rad_points=deepcopy(radar_cloud), vecs_to_rads=vecs_to_rads, mini_delta=mini_delta)
+    radar = get_fixed_radar_points(rad_points=radar_cloud, vecs_to_rads=vecs_to_rads, mini_delta=mini_delta)
     if denoise_lidar_points:
         lidar = LidarCloud(noise_filtering(lidar_cloud._points))
     else:
