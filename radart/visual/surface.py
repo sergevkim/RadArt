@@ -1,12 +1,12 @@
 import numpy as np
 import plotly.graph_objects as go
 from radart.utils.preprocessing import Data, RadarPoint, LidarPoint
-from radart.metrics.metrics import calc_metrics
+from radart.metrics.metrics import calc_metrics, LidarCloud
 
 
 def create_surface_plot(radar_points, lidar_points, vec_to_rads):
-    delta_t_values = np.arange(0, 2.1, 0.1)
-    mini_delta_values = np.arange(0, 1.1, 0.1)
+    delta_t_values = np.arange(0.5, 2.1, 0.1)
+    mini_delta_values = np.arange(-0.1, 0.1, 0.01)
     X, Y = np.meshgrid(delta_t_values, mini_delta_values)
     Z_density = np.zeros(X.shape)
     Z_nearest = np.zeros(X.shape)
@@ -22,9 +22,9 @@ def create_surface_plot(radar_points, lidar_points, vec_to_rads):
                 Z_nearest[i, j] = 0
                 continue
 
-            for p in sampled_radar:
-                if isinstance(p, RadarPoint):
-                    p.delta_t = delta_t
+            # for p in sampled_radar:
+            #     if isinstance(p, RadarPoint):
+            #         p.delta_t = delta_t
 
             combined = sampled_radar + sampled_lidar
 
@@ -39,9 +39,10 @@ def create_surface_plot(radar_points, lidar_points, vec_to_rads):
                 Z_density[i, j] = 0
                 Z_nearest[i, j] = 0
                 continue
+            
 
             radar_cloud = [p for p in filtered if isinstance(p, RadarPoint)]
-            lidar_cloud = [p for p in filtered if isinstance(p, LidarPoint)]
+            lidar_cloud = LidarCloud([p for p in filtered if isinstance(p, LidarPoint)])
 
             if not radar_cloud or not lidar_cloud:
                 Z_density[i, j] = 0
@@ -80,8 +81,13 @@ def create_surface_plot(radar_points, lidar_points, vec_to_rads):
             opacity=0.7
         ))
 
-    for fig in [fig_density, fig_nearest]:
+    for fig, title in zip([fig_density, fig_nearest], ['Density metric', 'Nearest metric']):
         fig.update_layout(
+            title={
+                'text' : title,
+                'x':0.5,
+                'xanchor': 'center'
+            },
             scene=dict(
                 xaxis_title='delta_t',
                 yaxis_title='mini_delta',
