@@ -74,7 +74,7 @@ def main():
     
     # Выводим полученные значения
     if density:
-        print("Densiti metric:", results[0])
+        print("Density metric:", results[0])
     if nearest_point:
         print("Nearest point metric:", results[1])
     if not density and not nearest_point:
