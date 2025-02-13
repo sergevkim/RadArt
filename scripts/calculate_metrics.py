@@ -1,9 +1,9 @@
 import argparse
 import json
-from metrics import Grid, density_metric, from_point_to_pair, find_nearest_lidar_points, nearest_point_metric, LidarCloud, calc_metrics
-from read_and_prepare_files import RadarPoint, Point, Data, LidarPoint, apply_gaussian_kernel_to_mult_radar_points
-from synchronization import get_fixed_radar_points
-from lidar_denoiser import noise_filtering
+from radart.metrics.metrics import Grid, density_metric, from_point_to_pair, find_nearest_lidar_points, nearest_point_metric, LidarCloud, calc_metrics
+from radart.utils.preprocessing import RadarPoint, Point, Data, LidarPoint, apply_gaussian_kernel_to_mult_radar_points
+from radart.core.synchronization import get_fixed_radar_points
+from radart.core.lidar_denoiser import noise_filtering
 
 def main():
     parser = argparse.ArgumentParser(description="Обрабатывает параметры запуска")
@@ -22,6 +22,11 @@ def main():
                         type=float,
                         default=0.06,
                         help="Смещение времени")
+    
+    parser.add_argument("--delta_t",
+                        type=float,
+                        default=3,
+                        help="Временное окно")
     
     parser.add_argument("--nearest_point",
                         action="store_true",
@@ -44,6 +49,7 @@ def main():
     scene_path = args.scene_path
     vecs_to_rads_path = args.radar_positions_path
     mini_delta = args.mini_delta
+    delta_t = args.delta_t
     density = args.density
     nearest_point = args.nearest_point
     denoise_lidar = args.denoise_lidar
@@ -68,8 +74,13 @@ def main():
     
     
     # Выводим полученные значения
-    print("Densiti metric:", results[0])
-    print("Nearest point metric:", result[1])
+    if density:
+        print("Densiti metric:", results[0])
+    if nearest_point:
+        print("Nearest point metric:", results[1])
+    if not density and not nearest_point:
+        print("Densiti metric:", results[0])
+        print("Nearest point metric:", results[1])
 
 
 if __name__ == "__main__":
