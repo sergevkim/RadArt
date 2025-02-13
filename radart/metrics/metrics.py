@@ -94,4 +94,4 @@ def calc_metrics(lidar_cloud: LidarCloud,
     radar = [p for p in radar if abs(p.delta_t) < delta_t]
     if multiply_radar_points:
         radar = Data.apply_gaussian_kernel_to_mult_radar_points(radar)
-    return density_metric(lidar, radar, 300), nearest_point_metric(lidar, radar)
+    return 1000 * density_metric(lidar, radar, 300), nearest_point_metric(lidar, radar)
