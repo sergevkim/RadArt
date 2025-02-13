@@ -1,22 +1,13 @@
 # RadArt
 
-### Project creators:
-1. Burzars<br />
-2. sval9ka07<br />
-3. MIPTestet<br />
-4. sergevkim<br />
-5. sayheykid<br />
-6. aleksanderkarpov<br />
-
 ## Installation
 
 ```
 pip install -e .
-
 ```
 
 
-## Download data:
+## Download data
 ```
 bash scripts/download_data.sh
 ```
@@ -56,11 +47,17 @@ python scripts/calculate_metrics.py
 
 ### Launch visualizations:
 ```
-python scripts/launch_vis.py
+python scripts/visualizer.py
 ```
 
 ### Project architecture:
-```                             
+```
+├── media                                      <- Photos and GIFs for README.md                                  <- Source code for use in this project.
+│   ├── checkboxes.gif                            
+│   ├── sliders.gif
+│   ├── sufrace_photo.png
+│   └── drawing.png
+│                                    
 ├── radart                                     <- Source code for use in this project.
 │   ├── __init__.py                            <- Initializes the radart package.
 │   ├── core                                   <- Core functionality. 
@@ -73,18 +70,42 @@ python scripts/launch_vis.py
 │   ├── utils                                  <- Utility scripts.
 │   │   └── preprocessing.py
 │   │
-│   ├── visual                                 <- Visualization scripts.
-│   │   ├── surface.py                         <- Surface construction.
-│   │   └── visual_plot.py                     <- Project visualisation.
-│   │   
-│   │
-│   └── scripts                                <- Scripts for launching tasks.
-│       ├── calculate_metrics.py               <- Run to get metric values.
-│       ├── download_data.sh                   <- Run to download our dataset.
-│       └── visualizer.py                      <- Run to explore the final visualization of RadArt.
+│   └──  visual                                <- Visualization scripts.
+│        ├── surface.py                        <- Surface construction.
+│        └── visual_plot.py                    <- Project visualisation.
+│      
+│   
+├── scripts                                    <- Scripts for launching tasks.
+│   ├── calculate_metrics.py                   <- Run to get metric values.
+│   ├── download_data.sh                       <- Run to download our dataset.
+│   └── visualizer.py                          <- Run to explore the final visualization of RadArt.
 │
 ├── LICENSE                                    <- Our MIT license.
 ├── README.md                                  <- The top-level README for developers using this project.
 ├── requirements.txt                           <- The requirements file for reproducing the project environment.
 └── setup.py                                   <- makes project pip installable (pip install -e .)
 ```
+## Website interface
+
+```
+питонячий.рф
+```
+
+### Sliders:
+![What's wrong with your internet connection?!](./media/sliders.gif)
+### Checkboxes:
+![What's wrong with your internet connection?!](./media/checkboxes.gif)
+### Metric surfaces:
+![What's wrong with your internet connection?!](./media/surface_photo.png)
+## 
+### sval9ka07's vizualization:
+![What's wrong with your internet connection?!](./media/drawing.png)
+#
+### Project creators:
+1. Burzars<br />
+2. sval9ka07<br />
+3. MIPTestet<br />
+4. sergevkim<br />
+5. sayheykid<br />
+6. aleksanderkarpov<br />
+
