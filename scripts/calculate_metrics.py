@@ -52,7 +52,7 @@ def main():
     
     #Прочтение данных
     data = Data.read_json(scene_path)
-    lidar = Data.convert_ints_to_points(data['lidar'])
+    lidar = LidarCloud(Data.convert_ints_to_points(data['lidar']))
     radar = Data.convert_ints_to_points(data['radar'])
     
     with open(vecs_to_rads_path) as f:
