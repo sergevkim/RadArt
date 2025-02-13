@@ -48,15 +48,15 @@ def main(args):
     radar_points_data = [radar_point_to_dict(pt) for pt in radar_points]
 
     def road_speed(radar_point: RadarPoint) -> float:
-
         radar_idx = radar_point.radar_idx
-        x0, y0, z0 = vec_to_rads[str(int(radar_idx))]
-        x, y, z = radar_point.x, radar_point.y, radar_point.z
-        speed_abs = radar_point.kAbsoluteRadialVelocity
-
-        distance_with_radar = ((x - x0)**2 + (y - y0)**2 + (z - z0)**2)**0.5 if z is not None else ((x - x0)**2 + (y - y0)**2)**0.5
-
-        return speed_abs * distance_with_radar
+        x0 = vec_to_rads[str(int(radar_idx))][0]
+        y0 = vec_to_rads[str(int(radar_idx))][1]
+        z0 = vec_to_rads[str(int(radar_idx))][2]
+        x = radar_point.initial_x
+        y = radar_point.initial_y
+        length = ((x - x0) * (x - x0) + (y - y0) * (y - y0)) ** 0.5
+        v_radar = radar_point.kAbsoluteRadialVelocity * length / (x - x0)
+        return v_radar
 
     R_weighed = [abs(road_speed(pt))**0.2  for pt in radar_points]
 
