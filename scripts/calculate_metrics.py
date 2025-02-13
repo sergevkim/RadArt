@@ -8,7 +8,7 @@ def main():
 
     parser.add_argument("--scene_path",
                         type = str,
-                        default = "data/scenes/scene_1.json",
+                        default = "data/scenes/scene_0.json",
                         help = "Путь до сцены")
     
     parser.add_argument("--radar_positions_path",
@@ -33,7 +33,8 @@ def main():
     parser.add_argument("--denoise_lidar",
                         action="store_true",
                         help="Очистка лидарных точек от больших плоских поверхностей (в частности, дороги)")
-    
+
+
     parser.add_argument("--multiply_radar_points",
                         action="store_true",
                         help="Разгладить и размножить радарные точки")

@@ -25,7 +25,33 @@ bash scripts/download_data.sh
 
 ### Calculate metrics:
 ```
-python scripts/calc_metrics.py
+python scripts/calculate_metrics.py
+```
+#### Additional flags:
+``` 
+--scene_path                    <- Path to scene 
+                                   (default=data/scenes/scene_0.json)
+                 
+--radar_positions_path          <- Path to radar coords 
+                                   (default=data/radar_positions.json
+
+--mini_delta                    <- Time offset (sec)
+                                   (default=0.06)
+
+--delta_t                       <- Time window (sec)
+                                   (default=3)
+
+--denoise_lidar                 <- Clearing lidar points from large flat surfaces (particularly roads)
+                                   (default=True)
+
+--multiply_radar_points         <- Smooth out and multiply radar points
+                                   (default=True)
+                                   
+--nearest_point                 <- Use nearest point metric
+                                   (default=True)
+                                   
+--density                       <- Use density metric
+                                   (default=True)
 ```
 
 ### Launch visualizations:
@@ -34,14 +60,7 @@ python scripts/launch_vis.py
 ```
 
 ### Project architecture:
-```
-├── LICENSE                                    <- Our MIT license.
-├── README.md                                  <- The top-level README for developers using this project.
-├── notebooks                                  <- Jupyter notebooks.
-│   ├── delays_and_speedcolors_launcher.ipynb
-│   ├── main.ipynb
-│   └── reflectance_launcher.ipynb
-│
+```                             
 ├── radart                                     <- Source code for use in this project.
 │   ├── __init__.py                            <- Initializes the radart package.
 │   ├── core                                   <- Core functionality. 
@@ -55,18 +74,17 @@ python scripts/launch_vis.py
 │   │   └── preprocessing.py
 │   │
 │   ├── visual                                 <- Visualization scripts.
-│   │   ├── delay_variety.py
-│   │   ├── delays_and_speedcol...
-│   │   ├── paint_reflectance.py
-│   │   ├── radild_func.py
-│   │   └── test_output.html
+│   │   ├── surface.py                         <- Surface construction.
+│   │   └── visual_plot.py                     <- Project visualisation.
 │   │   
 │   │
 │   └── scripts                                <- Scripts for launching tasks.
-│       ├── launcher_1.py
-│       ├── launcher_2.py
-│       └── launcher_dash.py
+│       ├── calculate_metrics.py               <- Run to get metric values.
+│       ├── download_data.sh                   <- Run to download our dataset.
+│       └── visualizer.py                      <- Run to explore the final visualization of RadArt.
 │
+├── LICENSE                                    <- Our MIT license.
+├── README.md                                  <- The top-level README for developers using this project.
 ├── requirements.txt                           <- The requirements file for reproducing the project environment.
 └── setup.py                                   <- makes project pip installable (pip install -e .)
 ```
