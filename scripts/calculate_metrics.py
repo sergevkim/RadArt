@@ -67,6 +67,7 @@ def main():
     
     results = calc_metrics(lidar_cloud = lidar,
                            radar_cloud = radar,
+                           vecs_to_rads = vecs_to_rads,
                            mini_delta = mini_delta,
                            delta_t = delta_t,
                            multiply_radar_points = multiply_radar_points,
